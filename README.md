@@ -1,0 +1,1 @@
+# bitcoin_raspadinhas_calculator
