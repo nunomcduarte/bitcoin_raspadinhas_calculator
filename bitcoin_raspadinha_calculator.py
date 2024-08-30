@@ -1,0 +1,1 @@
+print("Bitcoin Calculator Initialized")
