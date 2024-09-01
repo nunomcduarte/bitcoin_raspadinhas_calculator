@@ -4,7 +4,13 @@ document.getElementById('calculator-form').addEventListener('submit', function (
     // Get the input values
     const raspPerWeek = parseInt(document.getElementById('raspPerWeek').value);
     const raspCost = parseFloat(document.getElementById('raspCost').value);
-    const years = parseInt(document.getElementById('years').value);
+    let years = parseInt(document.getElementById('years').value);
+
+    // Enforce a maximum of 10 years
+    if (years > 10) {
+        alert("The number of years cannot exceed 10. Please enter a value between 1 and 10.");
+        return;
+    }
 
     fetch('/calculate', {
         method: 'POST',

@@ -39,9 +39,13 @@ def index():
 @app.route('/calculate', methods=['POST'])
 def calculate():
     data = request.get_json()  # Get the JSON data from the request
-    rasp_per_week = int(data['raspPerWeek'])
-    rasp_cost = float(data['raspCost'])
+    rasp_per_week = int(data['raspPerWeek'])  # Keep rasp_per_week as an integer
+    rasp_cost = float(data['raspCost'])  # Allow fractional input for cost
     years = int(data['years'])
+
+    # Enforce a maximum of 10 years
+    if years > 10:
+        years = 10
 
     # Calculate total money spent
     total_spent = rasp_per_week * rasp_cost * 52 * years
@@ -73,4 +77,3 @@ def calculate():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
