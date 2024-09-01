@@ -1,5 +1,8 @@
+from flask import Flask, render_template, request, jsonify
 import yfinance as yf
-from datetime import datetime, timedelta
+from datetime import datetime
+
+app = Flask(__name__)
 
 # Function to fetch historical Bitcoin data on a weekly basis
 def fetch_weekly_bitcoin_data(start_date, end_date):
@@ -26,23 +29,34 @@ def calculate_weekly_investment_value(rasp_per_week, rasp_cost, start_date, end_
     
     return total_value
 
-# Step 1: Gather User Inputs
-rasp_per_week = int(input("How many Raspadinhas do you buy per week? "))
-rasp_cost = float(input("What is the average cost of a Raspadinha? (in Euros) "))
-years = int(input("For how many years do you want to calculate? "))
+# Home route to serve the main page
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-# Step 2: Calculate Total Money Spent
-total_spent = rasp_per_week * rasp_cost * 52 * years
+# API route to calculate the potential investment value
+@app.route('/calculate', methods=['POST'])
+def calculate():
+    data = request.get_json()  # Get the JSON data from the request
+    rasp_per_week = int(data['raspPerWeek'])
+    rasp_cost = float(data['raspCost'])
+    years = int(data['years'])
 
-# Calculate dates
-end_date = datetime.today().strftime('%Y-%m-%d')
-start_date = (datetime.today().replace(year=datetime.today().year - years)).strftime('%Y-%m-%d')
+    # Calculate total money spent
+    total_spent = rasp_per_week * rasp_cost * 52 * years
 
-# Step 3: Simulate Weekly Investments in Bitcoin
-investment_value = calculate_weekly_investment_value(rasp_per_week, rasp_cost, start_date, end_date)
+    # Calculate dates
+    end_date = datetime.today().strftime('%Y-%m-%d')
+    start_date = (datetime.today().replace(year=datetime.today().year - years)).strftime('%Y-%m-%d')
 
-# Display the results
-print(f"Total money spent on Raspadinhas over {years} years: €{total_spent:.2f}")
-print(f"Potential value if invested in Bitcoin weekly: €{investment_value:.2f}")
+    # Simulate weekly investments in Bitcoin
+    investment_value = calculate_weekly_investment_value(rasp_per_week, rasp_cost, start_date, end_date)
 
+    # Return the results as a JSON response
+    return jsonify({
+        'totalSpent': total_spent,
+        'investmentValue': investment_value
+    })
 
+if __name__ == '__main__':
+    app.run(debug=True)

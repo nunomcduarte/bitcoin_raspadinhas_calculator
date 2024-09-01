@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Raspadinhas Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Bitcoin Raspadinhas Calculator</h1>
+        <form id="calculator-form">
+            <label for="raspPerWeek">Raspadinhas per Week:</label>
+            <input type="number" id="raspPerWeek" name="raspPerWeek" required>
+
+            <label for="raspCost">Average Cost per Raspadinha (in Euros):</label>
+            <input type="number" id="raspCost" name="raspCost" required>
+
+            <label for="years">Number of Years:</label>
+            <input type="number" id="years" name="years" required>
+
+            <button type="submit">Calculate</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
